@@ -1,0 +1,17 @@
+{
+    "require": {
+        "slim/slim": "^3.0",
+        "illuminate/database": "~5.7",
+        "tuupola/slim-jwt-auth": "^3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Premium\\": "src/",
+            "Premium\\Api\\": "api/",
+            "Premium\\Api\\Controller\\": "api/v1/Controllers/"
+        }
+    },
+    "require-dev": {
+        "monolog/monolog": "^1.24"
+    }
+}
