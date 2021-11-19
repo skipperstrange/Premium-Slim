@@ -4,8 +4,8 @@ namespace Premium\Middleware;
 
 class ImageRemoveExif {
 
-	protected $rawPath = UP_ONE.UP_ONE.RAW_IMG_PATH;
-	protected $imgPath = UP_ONE.UP_ONE.LISTINGS_IMG_UPLOAD_PATH;
+	protected $rawPath = './';
+	protected $imgPath = './';
 
 	public function __invoke($request, $response, $next) {
 

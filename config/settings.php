@@ -1,19 +1,25 @@
 <?php
 
+$config['settings'] =
+[
+	'displayErrorDetails' => true,
+	'debug'               => true,
+	'mode'                => 'development'
+];
+
 $config['db'] =
 ['driver'    => "mysql",
 	'host'      => "localhost",
-	'database'  => "logiclab_Premium_db",
-	'username'  => "skipper",
-	'password'  => "abba",
+	'database'  => "vanguas2_homeprehensive",
+	'username'  => "root",
+	'password'  => "root",
 	'charset'   => "utf8",
 	'collation' => "utf8_general_ci",
 	'prefix'    => "tb"
 ];
 
-$config['env'] =
-[
-	'displayErrorDetails' => true,
-	'debug'               => true,
-	'mode'                => 'development'
+$config['frontend'] = [
+	'root' => APP_ROOT,
+	'404'  => APP_ROOT.'404.html',
+	'default' => 'index.html'
 ];

@@ -2,7 +2,7 @@
 
 namespace Premium\Middleware;
 
-class ListingImageFileMove {
+class ImageFileMove {
 	public function __invoke($request, $response, $next) {
 
 		$package = @$request->getUploadedFiles();
@@ -13,7 +13,7 @@ class ListingImageFileMove {
 		if ($file->getError() === UPLOAD_ERR_OK) {
 			$listing_id = $request->getAttribute('routeInfo')[2]['id'];
 			$filename   = generateRandom($listing_id).'.'.$extension;
-			$file->moveTo(UP_ONE.UP_ONE.LISTINGS_IMG_UPLOAD_PATH.$filename);
+			$file->moveTo($filename);
 
 			$request = $request->withAttribute('image', $filename);
 

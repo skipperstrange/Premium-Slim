@@ -7,8 +7,7 @@
     "autoload": {
         "psr-4": {
             "Premium\\": "src/",
-            "Premium\\Api\\": "api/",
-            "Premium\\Api\\Controller\\": "api/v1/Controllers/"
+            "Premium\\Api\\": "api/"
         }
     },
     "require-dev": {

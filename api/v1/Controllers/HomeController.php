@@ -1,8 +1,6 @@
 <?php
 
 namespace Premium\Api\Controllers;
-
-
 class HomeController
 {
     function index($request, $response) {

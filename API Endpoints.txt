@@ -3,87 +3,11 @@ API endpoints: Premium
 Endpoint Name: edit/customers
 Method       : POST
 Description  : create customers on the platform
-Parameters   : name, email, phone, status(pending on submission, active on otp verification), customer_type(fetched from the db)
+Parameters   : name, email, mobile, status(pending on submission, active on otp verification)
                code(one time password), password
-              This method should create an entry in the user table and send email and sms to the customer with otp verification
+              This method should create an entry in the customers table and send email and sms to the customer with otp verification
 
 Endpoint Name: customertypes
 Method       : POST
 Description  : create customer types on the platform
 Parameters   : name,description
-
-Endpoint Name: edit/amenities
-Method       : POST
-Description  : create amenities on the platform
-Parameters   : pic(font awesome image of the amenity), name 	
-
-Endpoint Name: edit/listings
-Method       : POST
-Description  : create a new listing on the platform
-Parameters   : description, listing_type,date_posted(picked from the system date), customer_id,user_id,location,price,currency,status
-
-	   
-Endpoint Name: edit/listings/:id/amenities
-Method       : POST
-Description  : create a new listing on the platform
-Parameters   : listing_id, amenity_type, amenity_value i.e. 1 for available, 0 for unavailable,user_id(id of the user who posted) and customer_id(id of the customer who it belongs to)
-
-Endpoint Name: edit/listings/:id/photos
-Method       : POST
-Description  : Add photos to a listing
-Parameters   : listing_id,photo(path), description,position,date_posted(system date),is360(1 for 360 pics, 0 for non 360)
-
-Endpoint Name: edit/listingtypes
-Method       : POST
-Description  : Listing type i.e. short stay, long stay for rooms, land, hotel room, 
-Parameters   : name, description
-Required	 : name, description
-
-Endpoint Name: edit/listingviews
-Method       : POST
-Description  : Views made on a listing
-Parameters   : created_at(system date),user who did the viewing
-Required	 : user_id, listing_id
-
-Endpoint Name: searchlistings
-Method       : POST
-Description  : Get list of listings by keyword to be queried against
-Parameters   : query
-Required	 : query
-
-Endpoint Name: users
-Method       : POST
-Description  : Create users on a platform
-Parameters   : username, user_type, email, password, customer_id,status
-Required	 : username, email, password
-
-Endpoint    :  Login
-Method      :  POST
-Description :  Login a user and retuen token for authentication
-
-
-Endpoint:  activate/:id/:code --activate a user --POST
-Endpoint:  sociallogin/:email/:id/:socialmedianame  ---social login using facebook, google plus --POST
-Endpoint:  forgot/:email   --reset a user's password --GET
-
-Endpoint: listings/types/:type --lists items by type --GET
-Endpoint: listings/customer/:customer_id --lists items of a customer --GET
-
-*Listings should include photos, views, amenities etc.
-
-
-working EndPoints
-
-customers - POST
-customertypes -POST
-amenities - POST
-listings - POST
-listings - GET
-listings/:id - GET
-listings/:id/amenities - POST
-listings/:id/photos - POST
-listingtypes - POST
-users - POST
-login - POST
-searchlistings - POST
-            
