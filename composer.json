@@ -6,9 +6,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Premium\\": "src/",
-            "Premium\\Api\\": "api/"
-        }
+            "Premium\\": "src/"
+        },
+        "classmap": ["api/v1/Controllers/"]
     },
     "require-dev": {
         "monolog/monolog": "^1.24"
