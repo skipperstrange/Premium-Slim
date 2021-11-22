@@ -1,10 +1,7 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
+    <v-col cols="12" sm="8" md="12">
+      
       <v-card>
         <v-card-title class="headline">
           Welcome to the Vuetify + Nuxt.js template
@@ -75,3 +72,29 @@
     </v-col>
   </v-row>
 </template>
+
+<script>
+export default {
+
+  data() {
+    return {
+      customers: [],
+      requests: []
+    }
+  },
+
+  created()  {
+    this.$axios
+            .get('/customers')
+            .then(response=> {
+                console.log(response)
+            });
+
+    this.$axios
+            .get('/requests')
+            .then(response=> {
+                console.log(response)
+            });
+  }
+}
+</script>

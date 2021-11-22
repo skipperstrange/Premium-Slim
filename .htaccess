@@ -1,0 +1,6 @@
+RewriteEngine on 
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule ^ api/v1/index.php?path=$1 [QSA,L]
+
+#works in mamp

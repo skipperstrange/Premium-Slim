@@ -2,12 +2,11 @@ API endpoints: Premium
 -------------------------
 Endpoint Name: edit/customers
 Method       : POST
-Description  : create customers on the platform
-Parameters   : name, email, mobile, status(pending on submission, active on otp verification)
-               code(one time password), password
+Description  : edits customers on the platform
+Parameters   : name, email, mobile, status optional.
               This method should create an entry in the customers table and send email and sms to the customer with otp verification
 
-Endpoint Name: customertypes
+Endpoint Name: customers/id
 Method       : POST
-Description  : create customer types on the platform
-Parameters   : name,description
+Description  : gets a single customer by id
+Parameters   : id

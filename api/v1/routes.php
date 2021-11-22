@@ -23,5 +23,14 @@ $app->post('/login', 'AuthController:authenticate');
 /*
 Customers
  */
-$app->post('/customers', 'CustomerController:create');
+//$app->post('/customers', 'CustomerController:create');
+$app->get('/customers', 'CustomerController:index');
+$app->get('/customers/{id}', 'CustomerController:index');
+
+/*
+Requests
+*/
+$app->get('/requests', 'RequestController:index');
+$app->get('/requests/{id}', 'RequestController:index');
+$app->get('/customer/{id}/requests', 'RequestController:customer');
 

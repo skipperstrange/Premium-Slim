@@ -8,19 +8,6 @@ This is was extracted from AzrtrasC.
  */
 
 // This function must always be availible
-function is_secure_connection() {
-	$secure_connection = 0;
-	if (isset($_SERVER['HTTPS'])) {
-		$secure_connection = 1;
-		if ($_SERVER["HTTPS"] == "on") {
-			return $secure_connection;
-		} else {
-			$secure_connection = 0;
-		}
-		return $secure_connection;
-	}
-	return $secure_connection;
-}
 
 define('DS', '/');
 define('UP_ONE', '../');
@@ -52,7 +39,7 @@ define('WEB_URL', 'https://'.$_SERVER['SERVER_NAME'].PORT);
 endif;
 
 define('BASE_LINK', WEB_URL);
-define('API_URL', WEB_URL.DS.'api'.DS.'v'.API_VERSION);
+define('API_URL', WEB_URL.DS.'api'.DS.'v'.API_BASEVERSION);
 
 //Library paths
 define('CONFIG_PATH', 'config'.DS);

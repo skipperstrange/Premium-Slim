@@ -3,6 +3,20 @@
  * This file contains system functions 
  */
 
+function is_secure_connection() {
+	$secure_connection = 0;
+	if (isset($_SERVER['HTTPS'])) {
+		$secure_connection = 1;
+		if ($_SERVER["HTTPS"] == "on") {
+			return $secure_connection;
+		} else {
+			$secure_connection = 0;
+		}
+		return $secure_connection;
+	}
+	return $secure_connection;
+}
+
 //get a cofiguration value
 function get_config(string $key){
     global $config;

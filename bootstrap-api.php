@@ -39,6 +39,10 @@ $container['CustomerController'] = function ($container) {
     return new Premium\Api\Controllers\CustomerController;
 };
 
+$container['RequestController'] = function ($container) {
+    return new Premium\Api\Controllers\RequestController;
+};
+
 $container['UserController'] = function ($container) {
     return new Premium\Api\Controllers\UserController;
 };

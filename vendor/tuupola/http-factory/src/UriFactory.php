@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
 
-Copyright (c) 2017-2019 Mika Tuupola
+Copyright (c) 2017-2021 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,8 @@ use GuzzleHttp\Psr7\Uri as GuzzleUri;
 use Nyholm\Psr7\Uri as NyholmUri;
 use Slim\Http\Uri as SlimUri;
 use Slim\Psr7\Factory\UriFactory as SlimPsr7UriFactory;
-use Zend\Diactoros\Uri as DiactorosUri;
+use Zend\Diactoros\Uri as ZendDiactorosUri;
+use Laminas\Diactoros\Uri as LaminasDiactorosUri;
 
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
@@ -49,8 +50,8 @@ final class UriFactory implements UriFactoryInterface
      */
     public function createUri(string $uri = ""): UriInterface
     {
-        if (class_exists(DiactorosUri::class)) {
-            return new DiactorosUri($uri);
+        if (class_exists(LaminasDiactorosUri::class)) {
+            return new LaminasDiactorosUri($uri);
         }
 
         if (class_exists(NyholmUri::class)) {
@@ -59,6 +60,10 @@ final class UriFactory implements UriFactoryInterface
 
         if (class_exists(SlimPsr7UriFactory::class)) {
             return (new SlimPsr7UriFactory)->createUri($uri);
+        }
+
+        if (class_exists(ZendDiactorosUri::class)) {
+            return new ZendDiactorosUri($uri);
         }
 
         if (class_exists(SlimUri::class)) {

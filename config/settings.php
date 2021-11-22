@@ -10,12 +10,12 @@ $config['settings'] =
 $config['db'] =
 ['driver'    => "mysql",
 	'host'      => "localhost",
-	'database'  => "",
+	'database'  => "vanguas2_homeprehensive",
 	'username'  => "root",
 	'password'  => "root",
 	'charset'   => "utf8",
 	'collation' => "utf8_general_ci",
-	'prefix'    => "tb"
+	'prefix'    => ""
 ];
 
 $config['frontend'] = [
