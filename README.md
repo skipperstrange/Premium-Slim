@@ -7,8 +7,8 @@ configure database at config/database.php
 
 test endpoints:
 {url}/api/
-{url}/api/listings
-{url}/api/listings/{id}
+{url}/api/customers
+{url}/api/customers/{id}
 
 N.B.
 For development and debugging, use .htaccess.development as default .htaccess
