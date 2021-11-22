@@ -1,0 +1,23 @@
+{
+    "name": "premium/api",
+    "description": "Base api for quick minince Ghana",
+    "type": "project",
+    "require": {
+        "slim/slim": "^3.0",
+        "illuminate/database": "~5.7",
+        "tuupola/slim-jwt-auth": "^3.4"
+    },
+    "license": "GNU",
+    "autoload": {
+        "psr-4": {
+            "Premium\\Api\\": "src/"
+        }
+    },
+    "authors": [{
+        "name": "SkipperStrange",
+        "email": "skipperstrange@gmail.com"
+    }],
+    "require-dev": {
+        "monolog/monolog": "^1.24"
+    }
+}
