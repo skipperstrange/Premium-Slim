@@ -79,13 +79,12 @@
     >
     <template v-slot:item="{ item }">
           <tr class="cus-info">
-              <td><b v-html="item.customer.name"></b> 
+              <td><b>{{item.customer.name}}></b> 
                   <p class="text-caption text-info"><a class="btn btn-info" :href='"mailto:"+item.customer.email+""' v-html="item.customer.email"></a></p>
               </td>
-              <td><a :href='"tel:"+item.customer.mobile+""' v-html="item.customer.mobile"></a></td>
-              <td><p v-html="item.policy"></p></td>
-              <td><p v-html="item.property_policy"></p></td>
-              <td></td>
+              <td><a :href='"tel:"+item.customer.mobile+""'>{{item.customer.mobile}}</a></td>
+              <td><p>{{item.policy}}</p></td>
+              <td><p>{{item.property_policy}}</p></td>
               <td>
                   <v-btn icon title="Detailed view on item.">
                       <v-icon class="m-0" @click="viewItem(props.item)" color="primary" dark>mdi-note-search-outline</v-icon>

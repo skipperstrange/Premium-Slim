@@ -18,13 +18,14 @@ class RequestController
 
         if(isset($args['id'])){
             $request = $requestModel->find($args['id']);
+            $request['usage'] = $request['vusage'];
             $payload = $this->organize_payload($request);
             return $response->withStatus(200)->withJson($payload);
         }
 
         $requests = $requestModel->all();
-
         foreach ($requests as $request) {
+            $request['usage'] = $request['vusage'];
             $payload[] = $this->organize_payload($request);
         }
         return $response->withStatus(200)->withJson($payload);
@@ -63,9 +64,9 @@ class RequestController
             'engine_cap_cc' => $result->cubic, 'claim_free'=>$result->cfree, 'additional_third_party' => $result->extra_tppd,
             'excess' => $result->excess, 'duration'=>$result->duration, 'additional_third_party' => $result->extra_tppd, 'property_policy'=>$homeprehensive->cover_name,
             'property_policy_id'=>$homeprehensive->id,'property_content_value' => $result->txtcontentvalue, 'property_value'=>$result->txtbuildingvalue, 'additional_third_party' => $result->extra_tppd,
-            "status"=>$result->status,"request date"=>$result->datetime,
+            "status"=>$result->status,"request_date"=>$result->datetime, 
       
-
+        'original' => $result,
         'customer' => [
             'name' => $customer->fullname, 
             'email' => $customer->email,
@@ -76,7 +77,7 @@ class RequestController
             'usages'      => API_URL.'/usages/' . $usage->id,
             'cover'      => API_URL.'/covers/' . $cover->id,
             '_self'      => API_URL.'/requests/' . $result->id,
-        ]
+        ],
           ];
 
         return $data;
