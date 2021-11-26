@@ -60,7 +60,7 @@ class RequestController
         $data =  [
             'id'=>$result->id, 'location' => $result->buildinglocation, 
             'start_date' => $result->mobile, 'policy'=>$cover->cover_name, 'policy_code'=>$result->cover, 'usage' => $usage->usage_name, 'usage_code' => $usage->id,
-            'manufacture_year' => $result->year, 'seats'=>$result->seat, 'vehicle_value' => $result->value,
+            'manufacture_year' => $result->year, 'seats'=>$result->seat, 'vehicle_value' => $result->value, 'currency' => $result->currency,
             'engine_cap_cc' => $result->cubic, 'claim_free'=>$result->cfree, 'additional_third_party' => $result->extra_tppd,
             'excess' => $result->excess, 'duration'=>$result->duration, 'additional_third_party' => $result->extra_tppd, 'property_policy'=>$homeprehensive->cover_name,
             'property_policy_id'=>$homeprehensive->id,'property_content_value' => $result->txtcontentvalue, 'property_value'=>$result->txtbuildingvalue, 'additional_third_party' => $result->extra_tppd,

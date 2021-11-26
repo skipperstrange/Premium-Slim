@@ -40,13 +40,14 @@ export default {
         };
     },
     created() {
-        this.$axios
+      /*  this.$axios
             .get("/customers")
             .then(response => {
             this.customers.tab = "Customers";
             this.customers.content = response.data;
             this.items.push(this.customers);
         });
+        */
         this.$axios
             .get("/requests")
             .then(response => {

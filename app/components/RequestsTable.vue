@@ -16,29 +16,31 @@
      <template #item="{ item }">
          <tr>
              <td><b>{{item.customer.name}}</b> 
-                <p class="text-caption text-info"><a class="btn btn-info" :href='"mailto:"+item.customer.email+""' v-html="item.customer.email"></a></p>
+                <p class="text-caption text-info"><a class="btn btn-info" :href='"mailto:"+item.customer.email+""'>{{item.customer.email}}</a></p>
             </td>
              <td><a :href='"tel:"+item.customer.mobile+""'>{{item.customer.mobile}}</a></td>
              <td><p>{{item.policy}}</p></td>
              <td><p>{{item.property_policy}}</p></td>
              <td></td>
              <td>
+                 <v-btn icon title="View User">
+                    <v-icon class="m-0" :color="status[item.status]" :title="item.status" @click="markDone(item)" >mdi-check-circle-outline</v-icon>
+                </v-btn>
                 <v-btn icon title="Detailed view on item.">
-                    <v-icon class="m-0" @click="previewRequestQuote(item)" color="primary" dark>mdi-note-search-outline</v-icon>
+                    <v-icon class="m-0" color="primary" @click="previewRequestQuote(item)" dark>mdi-note-search-outline</v-icon>
                 </v-btn>
                 <v-btn icon title="View User">
-                    <v-icon class="m-0" @click="viewCustomer(item.customer)"  color="success">mdi-account</v-icon>
-                </v-btn>
-                <v-btn icon title="View User">
-                    <v-icon class="m-0" @click="comment(item)"  color="warning">mdi-chat-outline</v-icon>
+                    <v-icon class="m-0" color="warning" @click="comment(item)" >mdi-chat-outline</v-icon>
                 </v-btn>
             </td>
          </tr>
      </template>
    </v-data-table>
 
-    <v-dialog v-model="showQuoteDialog" top width="80%">
-      <QuoteTemplate :request="selectedRequest" />
+     <v-dialog v-model="dialog" xs12 md6 lg6 >
+         <div  v-if="showQuoteDialog">
+            <QuoteTemplate :request="selectedRequest" />
+         </div>
     </v-dialog>
    
 
@@ -69,6 +71,7 @@ export default{
         showQuoteDialog: false,
         showCommentDialog: false,
         showCustomerDialog: false,
+        status: {'pending':"",'failed': "",'completed':"",'unfollowed':""},
         headers: [
         {
         text: 'Name',
@@ -135,20 +138,22 @@ export default{
       },
 
        previewRequestQuote(request){
-           this.selectedRequest = request
-           this.openDialog('quote')
+           this.openDialog('quote', request)
        },
        viewCustomer(customer){
-           this.openDialog('customer')
+           this.openDialog('customer', customer)
            console.log(customer);
        },
        comment(request){
-           this.openDialog('comment')
-           console.log(request)
+           this.openDialog('comment', request)
+       },
+
+       markDone(id){
+           console.log(id);
        },
 
        // choose which dialogto show - quote, customer, comment
-       enableDialogue(dialog){
+       enableDialog(dialog){
            // eslint-disable-next-line no-empty
            switch (dialog){
                case 'quote':
@@ -160,22 +165,29 @@ export default{
                case 'customer':
                    this.showCustomerDialog = true
                break;
+               case 'comment':
+                   this.showCommentDialog = true
+               break;
            }
        },
-        disableDialoge(){
+
+        disableDialog(){
             this.showQuoteDialog = false
             this.showCommentDialog = false
             this.showCustomerDialog = false
         },
 
-        openDialog(dialog){
-            this.enableDialogue(dialog)
+        openDialog(dialog, request){
+            this.closeDialog()
+            this.selectedRequest = request
+            this.$nuxt.$emit('request-sent', {request})
+            this.enableDialog(dialog)
             this.dialog = true
         },
 
-        closeDialog(dialog){
+        closeDialog(){
             this.dialog = false;
-            this.disableDialoge()
+            this.disableDialog()
         }
     }
 }
@@ -192,4 +204,6 @@ export default{
 .v-data-table > .v-data-table__wrapper > table > thead > tr > td a{
      text-decoration: none;
 }
+
+
 </style>
