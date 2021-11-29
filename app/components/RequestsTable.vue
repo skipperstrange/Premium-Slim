@@ -18,7 +18,11 @@
              <td><b>{{item.customer.name}}</b> 
                 <p class="text-caption text-info"><a class="btn btn-info" :href='"mailto:"+item.customer.email+""'>{{item.customer.email}}</a></p>
             </td>
-             <td><a :href='"tel:"+item.customer.mobile+""'>{{item.customer.mobile}}</a></td>
+             <td style="text-align: center;"><b>{{item.customer.mobile}}</b>
+             <p><a :href='"https://wa.me/"+item.customer.mobile+""' title="Send a whatsapp message." target="_blank"> <v-icon class="m-0" color="success" >mdi-whatsapp</v-icon></a>
+             &nbsp; 
+             &nbsp; 
+             <a :href='"tel:"+item.customer.mobile+""' title="Call this customer."> <v-icon class="m-0" color="success" >mdi-phone</v-icon></a></p></td>
              <td><p>{{item.policy}}</p></td>
              <td><p>{{item.property_policy}}</p></td>
              <td></td>
@@ -30,16 +34,19 @@
                     <v-icon class="m-0" color="primary" @click="previewRequestQuote(item)" dark>mdi-note-search-outline</v-icon>
                 </v-btn>
                 <v-btn icon title="View User">
-                    <v-icon class="m-0" color="warning" @click="comment(item)" >mdi-chat-outline</v-icon>
+                    <v-icon class="m-0" title="Comment on item. N.B. This will be marked as pending for a follow up" color="warning" @click="comment(item)" >mdi-message-outline</v-icon>
                 </v-btn>
             </td>
          </tr>
      </template>
    </v-data-table>
 
-     <v-dialog v-model="dialog" xs12 md6 lg6 >
+     <v-dialog v-model="dialog" width="60%" xs12 md6 lg6 >
          <div  v-if="showQuoteDialog">
            <QuoteTemplate :request="selectedRequest" :quoteMotorDetails="quoteMotorDetails" :quoteHomeDetails="quoteHomeDetails" />
+         </div>
+         <div  v-if="showCommentDialog">
+             <RequestComment :request="selectedRequest" />
          </div>
     </v-dialog>
    
@@ -49,10 +56,12 @@
 
 <script>
 import QuoteTemplate from './QuoteTemplate.vue'
+import RequestComment from './RequestComment.vue'
 export default{
     name: "RequestsTable",
     components:{
-       QuoteTemplate
+        QuoteTemplate,
+        RequestComment
         },
     props: {
         RequestData: {}
@@ -84,7 +93,7 @@ export default{
         value: 'fullname',
         filterable: true
         },
-        { text: 'Contact', value: 'mobile' },
+        { text: 'Contact', value: 'mobile', align: 'center', },
         {
         text: 'Policy',
         align: '',
@@ -152,6 +161,7 @@ export default{
            console.log(customer);
        },
        comment(request){
+           this.selectedRequest = request
            this.openDialog('comment', request)
        },
 
