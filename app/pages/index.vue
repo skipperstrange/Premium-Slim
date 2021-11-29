@@ -31,6 +31,8 @@
 <script>
 import RequestsTable from "~/components/RequestsTable.vue";
 export default {
+    components: { RequestsTable },
+
     data() {
         return {
             tab: null,
@@ -56,6 +58,5 @@ export default {
             this.items.push(this.requests);
         });
     },
-    components: { RequestsTable }
 }
 </script>

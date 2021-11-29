@@ -46,7 +46,7 @@
                 </thead>
               <tr v-for="(detail, index) in  premiums" :key="index">
                   <td class="text-left"><b>{{index}} : </b></td>
-                  <td class="text-left"> {{detail}}</td>
+                  <td class="text-left">{{detail}}</td>
               </tr>
               </template>
           </v-simple-table>
@@ -74,53 +74,25 @@
 export default {
     name: "QuoteTemplate",
     props: {
-        request: {}
+        request: {}, 
+        quoteMotorDetails: {},
+        quoteHomeDetails: {},
+        
     },
     data() {
         return {
-            quoteMotorDetails: {},
-            quoteHomeDetails: {},
-            quoteSummary: {},
+           quoteSummary: {},
             durationMaps: ["1 Month", "3 Months", "6 Months", "12 Months"],
             currency: ["GH₵", "US$"],
             premiums: {},
         }
     },
     
-    created(){
-        this.setupQuoteData()
-    },
 
     methods: {
-        setupQuoteData(){
-            // eslint-disable-next-line dot-notation
-            this.quoteMotorDetails['Policy'] = this.request.policy 
-            // eslint-disable-next-line dot-notation
-            this.quoteMotorDetails['Duration'] = this.durationMaps[(this.request.duration - 1)] 
-            this.quoteMotorDetails["Year of Manufacture"] = this.request.manufacture_year 
-            this.quoteMotorDetails["Vehicle Value"] = this.request.vehicle_value 
-            // eslint-disable-next-line dot-notation
-            this.quoteMotorDetails["Capacity"] = this.request.engine_cap_cc 
-            this.quoteMotorDetails["Claim Free"] = this.request.claim_free 
-            this.quoteMotorDetails["Addition Third Party"] = this.request.additional_third_party 
-            this.quoteMotorDetails["Request Date"] = this.request.request_date 
-            // eslint-disable-next-line dot-notation
-            this.quoteMotorDetails["Seats"] = this.request.seats 
-            
-            // eslint-disable-next-line dot-notation
-            this.quoteMotorDetails["Usage"] = this.request.usage 
-            // eslint-disable-next-line dot-notation
-            this.quoteMotorDetails["Excess"] = this.request.excess 
-
-            // eslint-disable-next-line dot-notation
-            this.quoteHomeDetails["Home Policy"] = this.request.property_policy 
-
-            this.quoteHomeDetails["Property Value"] = this.request.property_value 
-            
-            this.quoteHomeDetails["Content Value"] = this.request.property_content_value 
-        },
-
+       
         calculateQuote(){
+            console.log(this.currency[this.request.currency])
             const bodyFormData = new FormData()
             // eslint-disable-next-line no-undef
             // eslint-disable-next-line prefer-const

@@ -1,33 +1,47 @@
-import axios from '@nuxtjs/axios'
+import axios from 'axios'
 
 export const state = () => ({
     customers: [],
-    requests: []
+    requests: [],
+    request: {},
+    customer: {}
 })
 
 export const mutations = {
     setCustomers(state, customers) {
         state.customers = customers
     },
+    setCurrentCustomer(state, customer) {
+        state.request = customer
+    },
     setRequests(state, requests) {
         state.requests = requests
     },
-    setCurrentRequest(state, request) {
+    currentRequest(state, request) {
         state.request = request
     },
 }
 
 export const actions = {
-    async commitCustomers({ commit }) {
-        const response = await axios.get("/customers")
-        const customers = response.data
+    async nuxtServerInit({ commit }) {
+        await axios.get("http://localhost:8080/api/v1/requests").then((response) => {
+            const requests = response.data
+            commit("setRequests", requests)
+        }).catch(e => console.log(e))
 
-        commit("setCustomers", customers)
+        await axios.get("http://localhost:8080/api/v1/customers").then((response) => {
+            const customers = response.data
+            commit("setCustomers", customers)
+        }).catch(e => console.log(e))
     },
-    async commitRequests({ commit }) {
-        const response = await axios.get("/requests")
-        const requests = response.data
 
-        commit("setRequests", requests)
+    setCurrentRequest({ commit }, request) {
+        commit('currentRequest', request)
+    }
+}
+
+export const getters = {
+    getCurrentRequest: (state) => {
+        return state.request
     }
 }

@@ -39,7 +39,7 @@
 
      <v-dialog v-model="dialog" xs12 md6 lg6 >
          <div  v-if="showQuoteDialog">
-            <QuoteTemplate :request="selectedRequest" />
+           <QuoteTemplate :request="selectedRequest" :quoteMotorDetails="quoteMotorDetails" :quoteHomeDetails="quoteHomeDetails" />
          </div>
     </v-dialog>
    
@@ -48,12 +48,11 @@
 </template>
 
 <script>
-
 import QuoteTemplate from './QuoteTemplate.vue'
 export default{
     name: "RequestsTable",
     components:{
-        QuoteTemplate,
+       QuoteTemplate
         },
     props: {
         RequestData: {}
@@ -72,6 +71,12 @@ export default{
         showCommentDialog: false,
         showCustomerDialog: false,
         status: {'pending':"",'failed': "",'completed':"",'unfollowed':""},
+        quoteMotorDetails: {},
+        quoteHomeDetails: {},
+        quoteSummary: {},
+        durationMaps: ["1 Month", "3 Months", "6 Months", "12 Months"],
+        currency: ["GH₵", "US$"],
+        premiums: {},
         headers: [
         {
         text: 'Name',
@@ -138,7 +143,9 @@ export default{
       },
 
        previewRequestQuote(request){
-           this.openDialog('quote', request)
+           this.selectedRequest = request
+           this.setupQuoteData(request)
+            this.openDialog('quote', request)
        },
        viewCustomer(customer){
            this.openDialog('customer', customer)
@@ -148,8 +155,8 @@ export default{
            this.openDialog('comment', request)
        },
 
-       markDone(id){
-           console.log(id);
+       markDone(item){
+           console.log(item);
        },
 
        // choose which dialogto show - quote, customer, comment
@@ -180,7 +187,7 @@ export default{
         openDialog(dialog, request){
             this.closeDialog()
             this.selectedRequest = request
-            this.$nuxt.$emit('request-sent', {request})
+            this.$emit('request-sent', {request})
             this.enableDialog(dialog)
             this.dialog = true
         },
@@ -188,7 +195,63 @@ export default{
         closeDialog(){
             this.dialog = false;
             this.disableDialog()
+        },
+
+        setupQuoteData(request){
+this.quoteMotorDetails = {}
+
+            // eslint-disable-next-line dot-notation
+            this.quoteMotorDetails['Policy'] = request.policy 
+            // eslint-disable-next-line dot-notation
+            this.quoteMotorDetails['Duration'] = this.durationMaps[(this.selectedRequest.duration - 1)] 
+            this.quoteMotorDetails["Year of Manufacture"] = request.manufacture_year 
+            this.quoteMotorDetails["Vehicle Value"] = request.vehicle_value 
+            // eslint-disable-next-line dot-notation
+            this.quoteMotorDetails["Capacity"] =request.engine_cap_cc 
+            this.quoteMotorDetails["Claim Free"] = request.claim_free 
+            this.quoteMotorDetails["Addition Third Party"] = request.additional_third_party 
+            this.quoteMotorDetails["Request Date"] = request.request_date 
+            // eslint-disable-next-line dot-notation
+            this.quoteMotorDetails["Seats"] = request.seats 
+            
+            // eslint-disable-next-line dot-notation
+            this.quoteMotorDetails["Usage"] = request.usage 
+            // eslint-disable-next-line dot-notation
+            this.quoteMotorDetails["Excess"] = request.excess 
+
+this.quoteHomeDetails = {}
+
+            // eslint-disable-next-line dot-notation
+            this.quoteHomeDetails["Home Policy"] = request.property_policy 
+
+            this.quoteHomeDetails["Property Value"] = request.property_value 
+            
+            this.quoteHomeDetails["Content Value"] = request.property_content_value 
+
+            console.log(this.quoteMotorDetails)
+        },
+
+        calculateQuote(){
+            const bodyFormData = new FormData()
+            // eslint-disable-next-line no-undef
+            // eslint-disable-next-line prefer-const
+            for ( let key in this.selectedRequest.original ) {
+                // eslint-disable-next-line no-undef
+                bodyFormData.append(key, this.selectedRequest.original[key]);
+            }
+            this.$premiumapi({ method: 'post', url: 'getpremium.php', data: bodyFormData, headers: {'Content-Type': 'multipart/form-data' } }).then(response => {
+           
+            this.premiums = response.data.message;
+            this.quoteSummary['Homeprehensive Premium'] = this.premiums.homeprehensivepremium
+            this.quoteSummary['Home Premium'] = this.premiums.homeinsurancepremium
+            this.quoteSummary['Motor Premium'] = this.premiums.motorpremium
+            }).
+            catch(e=>{
+                console.log(e)
+            });
         }
+
+        
     }
 }
 </script>
