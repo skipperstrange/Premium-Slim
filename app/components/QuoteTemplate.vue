@@ -37,7 +37,7 @@
           </v-simple-table>
 
           <v-simple-table style="font-size:85%;">
-            <template v-slot:default>
+            <template #default>
                 <thead style="padding-bottom:.3rem;">
                     <tr>
                     <th class="text-left"><h2>Quote Summary</h2></th>
@@ -54,16 +54,6 @@
             <p><b>Status: </b>{{request.status}}</p>
 </v-container>
         </v-card-text>
-
-        <v-card-actions>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="calculateQuote()"
-          >
-            Quote Summary
-          </v-btn>
-        </v-card-actions>
         
       </v-card> 
 </div>
@@ -75,42 +65,21 @@ export default {
     name: "QuoteTemplate",
     props: {
         request: {}, 
+        premiums:{},
         quoteMotorDetails: {},
         quoteHomeDetails: {},
         
     },
     data() {
         return {
-           quoteSummary: {},
             durationMaps: ["1 Month", "3 Months", "6 Months", "12 Months"],
             currency: ["GH₵", "US$"],
-            premiums: {},
         }
     },
     
 
     methods: {
        
-        calculateQuote(){
-            console.log(this.currency[this.request.currency])
-            const bodyFormData = new FormData()
-            // eslint-disable-next-line no-undef
-            // eslint-disable-next-line prefer-const
-            for ( let key in this.request.original ) {
-                // eslint-disable-next-line no-undef
-                bodyFormData.append(key, this.request.original[key]);
-            }
-            this.$premiumapi({ method: 'post', url: 'getpremium.php', data: bodyFormData, headers: {'Content-Type': 'multipart/form-data' } }).then(response => {
-           
-            this.premiums = response.data.message;
-            this.quoteSummary['Homeprehensive Premium'] = this.premiums.homeprehensivepremium
-            this.quoteSummary['Home Premium'] = this.premiums.homeinsurancepremium
-            this.quoteSummary['Motor Premium'] = this.premiums.motorpremium
-            }).
-            catch(e=>{
-                console.log(e)
-            });
-        }
     }
 }
 </script>

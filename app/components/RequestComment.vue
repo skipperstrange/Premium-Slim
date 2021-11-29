@@ -53,8 +53,9 @@ export default {
     methods: {
         saveComment(){
             if (this.$refs.form.validate()) {
-                this.$api.post("/comment").then((response) => {
-                    console.log(response)
+                this.$api.post("/comment", {comment: this.comment, request_id: this.request.id})
+                .then((response) => {
+                    this.$refs.form.reset()
                 }).catch(e => console.log(e))
         }
         

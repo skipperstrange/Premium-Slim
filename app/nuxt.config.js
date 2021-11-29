@@ -16,6 +16,13 @@ export default {
         ]
     },
 
+    loading: {
+        color: 'DodgerBlue',
+        height: '3px',
+        continuous: true,
+        duration: 3000
+    },
+
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: ['~/assets/css/global.css'],
 

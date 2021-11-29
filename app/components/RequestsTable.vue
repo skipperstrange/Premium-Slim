@@ -43,10 +43,13 @@
 
      <v-dialog v-model="dialog" width="60%" xs12 md6 lg6 >
          <div  v-if="showQuoteDialog">
-           <QuoteTemplate :request="selectedRequest" :quoteMotorDetails="quoteMotorDetails" :quoteHomeDetails="quoteHomeDetails" />
+           <QuoteTemplate :request="selectedRequest" :premiums="premiums" :quoteMotorDetails="quoteMotorDetails" :quoteHomeDetails="quoteHomeDetails" />
          </div>
          <div  v-if="showCommentDialog">
              <RequestComment :request="selectedRequest" />
+         </div>
+         <div  v-if="showDoneDialog">
+             <DoneDialog :request="selectedRequest" />
          </div>
     </v-dialog>
    
@@ -68,7 +71,6 @@ export default{
     },
     data(){
         return {
-        filter: {},
         sortDesc: false,
         page: 1,
         search: "",
@@ -78,20 +80,22 @@ export default{
         dialog: false,
         showQuoteDialog: false,
         showCommentDialog: false,
-        showCustomerDialog: false,
-        status: {'pending':"",'failed': "",'completed':"",'unfollowed':""},
+        showDoneDialog: false,
+        status: {'pending':"warning",'failed': "danger",'completed':"success",'unfollowed':""},
+        durationMaps: ["1 Month", "3 Months", "6 Months", "12 Months"],
         quoteMotorDetails: {},
         quoteHomeDetails: {},
-        quoteSummary: {},
-        durationMaps: ["1 Month", "3 Months", "6 Months", "12 Months"],
-        currency: ["GH₵", "US$"],
         premiums: {},
         headers: [
         {
         text: 'Name',
         align: 'start',
         value: 'fullname',
-        filterable: true
+        filterable: true,
+        filter:  value => {
+              if (!this.fullname) return true
+              return value < parseInt(this.fullname)
+            }
         },
         { text: 'Contact', value: 'mobile', align: 'center', },
         {
@@ -152,7 +156,6 @@ export default{
       },
 
        previewRequestQuote(request){
-           this.selectedRequest = request
            this.setupQuoteData(request)
             this.openDialog('quote', request)
        },
@@ -161,16 +164,17 @@ export default{
            console.log(customer);
        },
        comment(request){
-           this.selectedRequest = request
            this.openDialog('comment', request)
        },
 
        markDone(item){
-           console.log(item);
+           this.openDialog('status', item)
        },
 
        // choose which dialogto show - quote, customer, comment
-       enableDialog(dialog){
+       enableDialog(dialog, request){
+
+            this.selectedRequest = request
            // eslint-disable-next-line no-empty
            switch (dialog){
                case 'quote':
@@ -179,8 +183,8 @@ export default{
                case 'request':
                     this.showRequestDialog = true
                break;
-               case 'customer':
-                   this.showCustomerDialog = true
+               case 'status':
+                   this.showDoneDialog = true
                break;
                case 'comment':
                    this.showCommentDialog = true
@@ -191,14 +195,12 @@ export default{
         disableDialog(){
             this.showQuoteDialog = false
             this.showCommentDialog = false
-            this.showCustomerDialog = false
+            this.showDoneDialog = false
         },
 
         openDialog(dialog, request){
             this.closeDialog()
-            this.selectedRequest = request
-            this.$emit('request-sent', {request})
-            this.enableDialog(dialog)
+            this.enableDialog(dialog, request)
             this.dialog = true
         },
 
@@ -208,7 +210,9 @@ export default{
         },
 
         setupQuoteData(request){
-this.quoteMotorDetails = {}
+            console.log(request)
+            this.calculateQuote().then(e=>{
+                this.quoteMotorDetails = {}
 
             // eslint-disable-next-line dot-notation
             this.quoteMotorDetails['Policy'] = request.policy 
@@ -237,11 +241,12 @@ this.quoteHomeDetails = {}
             this.quoteHomeDetails["Property Value"] = request.property_value 
             
             this.quoteHomeDetails["Content Value"] = request.property_content_value 
+            });
 
-            console.log(this.quoteMotorDetails)
+            
         },
 
-        calculateQuote(){
+        async calculateQuote(){
             const bodyFormData = new FormData()
             // eslint-disable-next-line no-undef
             // eslint-disable-next-line prefer-const
@@ -249,12 +254,14 @@ this.quoteHomeDetails = {}
                 // eslint-disable-next-line no-undef
                 bodyFormData.append(key, this.selectedRequest.original[key]);
             }
-            this.$premiumapi({ method: 'post', url: 'getpremium.php', data: bodyFormData, headers: {'Content-Type': 'multipart/form-data' } }).then(response => {
+            
+            await this.$premiumapi({ method: 'post', url: 'getpremium.php', data: bodyFormData, headers: {'Content-Type': 'multipart/form-data' } }).then(response => {
            
             this.premiums = response.data.message;
             this.quoteSummary['Homeprehensive Premium'] = this.premiums.homeprehensivepremium
             this.quoteSummary['Home Premium'] = this.premiums.homeinsurancepremium
             this.quoteSummary['Motor Premium'] = this.premiums.motorpremium
+            return true
             }).
             catch(e=>{
                 console.log(e)

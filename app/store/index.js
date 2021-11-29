@@ -33,13 +33,9 @@ export const actions = {
         }).catch(e => console.log(e))
     },
 
-    setCurrentRequest({ commit }, request) {
-        commit('currentRequest', request)
-    }
+
 }
 
 export const getters = {
-    getCurrentRequest: (state) => {
-        return state.request
-    }
+
 }
