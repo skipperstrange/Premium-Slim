@@ -2,9 +2,7 @@ import axios from 'axios'
 
 export const state = () => ({
     customers: [],
-    requests: [],
-    request: {},
-    customer: {}
+    requests: []
 })
 
 export const mutations = {

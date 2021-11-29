@@ -34,3 +34,7 @@ $app->get('/requests', 'RequestController:index');
 $app->get('/requests/{id}', 'RequestController:index');
 $app->get('/customer/{id}/requests', 'RequestController:customer');
 
+// Comments
+$app->post('/comment', 'CommentController:create');
+$app->get('/comment', 'CommentController:index');
+

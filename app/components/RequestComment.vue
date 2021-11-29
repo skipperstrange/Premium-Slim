@@ -17,7 +17,7 @@
         <v-tooltip bottom>
             <template #activator="{ on, attrs }">
             <v-btn color="success" v-bind="attrs" v-on="on" @click="saveComment()">
-                <v-icon color="white"> mdi-save-as </v-icon>
+                <v-icon color="white"> mdi-check-circle </v-icon> &nbsp;
                 Save
             </v-btn>
             </template>
@@ -53,8 +53,9 @@ export default {
     methods: {
         saveComment(){
             if (this.$refs.form.validate()) {
-          // do stuff
-          alert("Valid!");
+                this.$api.post("/comment").then((response) => {
+                    console.log(response)
+                }).catch(e => console.log(e))
         }
         
         },

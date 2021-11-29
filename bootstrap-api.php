@@ -43,6 +43,11 @@ $container['RequestController'] = function ($container) {
     return new Premium\Api\Controllers\RequestController;
 };
 
+
+$container['CommentController'] = function ($container) {
+    return new Premium\Api\Controllers\CommentController;
+};
+
 $container['UserController'] = function ($container) {
     return new Premium\Api\Controllers\UserController;
 };
