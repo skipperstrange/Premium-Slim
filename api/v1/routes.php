@@ -13,7 +13,9 @@ $app->group('/edit', function () use ($app) {
 /*
 Users
  */
-$app->post('/users', 'UserController:create');
+$app->post('/new', 'UserController:create');
+$app->get('/users', 'UserController:index');
+$app->get('/users/{id}', 'UserController:index');
 
 
 //authentication of new user
@@ -33,6 +35,7 @@ Requests
 $app->get('/requests', 'RequestController:index');
 $app->get('/requests/{id}', 'RequestController:index');
 $app->get('/customer/{id}/requests', 'RequestController:customer');
+$app->post('/status', 'RequestController:status_change');
 
 // Comments
 $app->post('/comment', 'CommentController:create');

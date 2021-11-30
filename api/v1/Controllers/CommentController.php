@@ -6,22 +6,26 @@ use Premium\Models\Comment;
 
 class CommentController  
 {
+    private $commentModel;
 
+    function __construct(){
+        $this->commentModel = new Comment();
+    }
+    
     function index($request, $response) {
         
     }
 
     function create($request, $response) {
     $_comment = $request->getParsedBody('comment', '');
-    $comment = new Comment();
 
-        mapObjectValues($comment, $_comment);
-        $comment->save();
+        mapObjectValues($this->commentModel, $_comment);
+        $this->commentModel->save();
 
-        if ($comment->id) {
+        if ($this->commentModel->id) {
             $payload = [
-                'request_uri'  => API_URL .'/requests/' . $comment->id ,
-                '_self'        => API_URL .'/comments/' . $comment->id
+                'request_uri'  => API_URL .'/requests/' . $this->commentModel->id ,
+                '_self'        => API_URL .'/comments/' . $this->commentModel->id
             ];
             return $response->withStatus(201)->withJson($payload);
         } else {

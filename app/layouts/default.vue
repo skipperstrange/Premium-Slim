@@ -73,11 +73,11 @@ export default {
           title: 'Quote Requests',
           to: '/'
         }
-       /* ,{
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '#'
-        } */
+        ,{
+          icon: 'mdi-person',
+          title: 'Users',
+          to: '/users'
+        }
       ],
       miniVariant: false,
       right: true,

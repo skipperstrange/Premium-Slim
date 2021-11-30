@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 <template>
 <div>
     <v-text-field
@@ -5,12 +6,12 @@
         append-icon="mdi-magnify"
         label="Search"
         single-line
-        hide-details
       ></v-text-field>
      <v-data-table
      :headers="headers"
      :items="RequestData"
      :search="search"
+     sort-by="fullname"
      class="elevation-1"
      >
      <template #item="{ item }">
@@ -28,7 +29,7 @@
              <td></td>
              <td>
                  <v-btn icon title="View User">
-                    <v-icon class="m-0" :color="status[item.status]" :title="item.status" @click="markDone(item)" >mdi-check-circle-outline</v-icon>
+                    <v-icon :class="'m-0 '+item.status" :title="item.status" @click="markDone(item)" >mdi-check-circle-outline</v-icon>
                 </v-btn>
                 <v-btn icon title="Detailed view on item.">
                     <v-icon class="m-0" color="primary" @click="previewRequestQuote(item)" dark>mdi-note-search-outline</v-icon>
@@ -81,7 +82,7 @@ export default{
         showQuoteDialog: false,
         showCommentDialog: false,
         showDoneDialog: false,
-        status: {'pending':"warning",'failed': "danger",'completed':"success",'unfollowed':""},
+        status: [],
         durationMaps: ["1 Month", "3 Months", "6 Months", "12 Months"],
         quoteMotorDetails: {},
         quoteHomeDetails: {},
@@ -135,6 +136,17 @@ export default{
     computed: {
       
     },
+    mounted(){
+        // eslint-disable-next-line dot-notation
+        this.status['pending'] = "warning"
+         // eslint-disable-next-line dot-notation
+        this.status['failed']= "danger"
+         // eslint-disable-next-line dot-notation
+        this.status['complete']="success"
+         // eslint-disable-next-line dot-notation
+        this.status['unfollowed']=""
+    
+    },
     created(){
       this.orgData();  
     },
@@ -175,6 +187,7 @@ export default{
        enableDialog(dialog, request){
 
             this.selectedRequest = request
+            console.log(this.status)
            // eslint-disable-next-line no-empty
            switch (dialog){
                case 'quote':
@@ -210,7 +223,6 @@ export default{
         },
 
         setupQuoteData(request){
-            console.log(request)
             this.calculateQuote().then(e=>{
                 this.quoteMotorDetails = {}
 
@@ -285,5 +297,8 @@ this.quoteHomeDetails = {}
      text-decoration: none;
 }
 
+.complete{
+    color:green;
+}
 
 </style>

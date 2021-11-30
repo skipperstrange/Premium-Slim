@@ -10,20 +10,26 @@ use Premium\Models\Homeinsurance;
 
 class RequestController
 {
+    private $requestModel;
+
+    function __construct()
+    {
+        $this->requestModel = new Request();
+    }
     
     function index($request, $response, $args)
     {
-        $requestModel = new Request();
+        
         $payload = []; 
 
         if(isset($args['id'])){
-            $request = $requestModel->find($args['id']);
+            $request = $this->requestModel->find($args['id']);
             $request['usage'] = $request['vusage'];
             $payload = $this->organize_payload($request);
             return $response->withStatus(200)->withJson($payload);
         }
 
-        $requests = $requestModel->all();
+        $requests = $this->requestModel->all();
         foreach ($requests as $request) {
             $request['usage'] = $request['vusage'];
             $payload[] = $this->organize_payload($request);
@@ -32,18 +38,16 @@ class RequestController
     }
 
     function create($request, $response) {
-        $_request = $request->getParsedBody('request', '');
-        $request = new Request();
-
+        $_request = $this->requestModel->getParsedBody('request', '');
         mapObjectValues($request, $_request);
-        $request->save();
+        $this->requestModel->save();
 
-        if ($request->id) {
+        if ($this->requestModel->id) {
             $payload = [
-                'request_type_id' => $request->id,
+                'request_type_id' => $this->requestModel->id,
                 'request'                    => $_request,
                 'links'                       => [
-                    '_self'                      => API_URL . '/requests/' . $request->id
+                    '_self'                      => API_URL . '/requests/' . $this->requestModel->id
                 ]
             ];
             return $response->withStatus(201)->withJson($payload);
@@ -81,5 +85,13 @@ class RequestController
           ];
 
         return $data;
+    }
+
+    function status_change($request, $response)
+    {
+        $_status = $request->getParsedBody('status', '');
+        mapObjectValues($this->requestModel, $_status);
+        $this->requestModel->where('id',$_status['id'])->update(['status'=>$_status['status']]);
+        return $response->withStatus(200)->withJson($_status);
     }
 }
