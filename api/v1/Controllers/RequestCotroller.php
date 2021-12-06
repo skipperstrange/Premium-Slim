@@ -97,12 +97,15 @@ class RequestController
     function status($request, $response, $args){
         if(isset($args['status'])){
             $status = $args['status'];
-            $results = $this->requestModel->select('*')->where('status', $status)->get()->toArray();
+            $results = $this->requestModel->select('*')->where('status', $status)->get();
             
-            $payload = $this->organize_payload($results);
+            foreach ($results as $request) {
+                $request['usage'] = $request['vusage'];
+               $payload[] = $this->organize_payload($request);
+            }
             return $response->withStatus(200)->withJson($results);
         }
-        return $response->withStatus(204)->withJson([]);
+        return $response->withStatus(404)->withJson([]);
     }
 
     function status_change($request, $response)
