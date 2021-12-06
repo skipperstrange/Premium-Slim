@@ -77,7 +77,7 @@ export default {
                     login: { url: "/auth/login", method: "post", propertyName: 'token' },
                     //        refresh: { url: "/api/auth/refresh-token", method: "post" },
                     logout: false, //  we don't have an endpoint for our logout in our API and we just remove the token from localstorage
-                    // user: { url: "/auth/user", method: "get" }
+                    user: { url: "/auth/user", method: "get" }
                 }
             }
         }

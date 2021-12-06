@@ -45,6 +45,7 @@ class AuthController
 
     function user($request, $response){
         $auth = $request->getHeader('Authourization');
+        print_r($auth);
         $_apikey = $auth[0];
         $apikey = substr($_apikey, strpos($_apikey, ' ')+1);
 

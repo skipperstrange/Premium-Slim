@@ -1,8 +1,7 @@
 <template>
   <v-app>
+      <div v-if="!isAuthenticated" class="hero"></div>
       <NavBar />
-
-    
     <v-main>
       <v-container>
         <Nuxt />
@@ -19,6 +18,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import NavBar from "~/components/NavBar.vue";
 
 export default {
@@ -28,5 +28,9 @@ export default {
         fixed: false,
       }
     },
+    computed: {
+      ...mapGetters(['isAuthenticated','loggedInUser']) 
+    },
+
 }
 </script>

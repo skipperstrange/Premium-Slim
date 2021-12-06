@@ -31,7 +31,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import RequestsTable from "~/components/RequestsTable.vue";
+import RequestsTable from "~/components/RequestsTemplatTable.vue";
 export default {
     components: { RequestsTable },
 
@@ -48,10 +48,7 @@ export default {
   },
 
     mounted(){
-          
-          console.log(this.loggedInUser)
-          if(!this.isAuthenticated){
-            alert("not authenticated")
+        if(!this.isAuthenticated){
             this.$router.push('auth/login')
             }else{
               this.initialize();

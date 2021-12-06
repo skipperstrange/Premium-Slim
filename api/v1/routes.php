@@ -38,6 +38,7 @@ Requests
 */
 $app->get('/requests', 'RequestController:index');
 $app->get('/requests/{id}', 'RequestController:index');
+$app->get('/requests/status/{status}', 'RequestController:status');
 $app->get('/customer/{id}/requests', 'RequestController:customer');
 $app->post('/status', 'RequestController:status_change');
 

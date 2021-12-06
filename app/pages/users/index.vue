@@ -40,7 +40,6 @@
             <v-card-title>
               <span class="text-h5">{{ formTitle }}</span>
             </v-card-title>
-
             <v-card-text>
               <v-container>
                 <v-row>
@@ -81,7 +80,6 @@
                 </v-row>
               </v-container>
             </v-card-text>
-
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
@@ -117,13 +115,25 @@
     </template>
     <template #[`item.actions`]="{ item }">
       <v-icon
+      title="Edit this user"
         small
         class="mr-2"
         @click="editUser(item)"
       >
         mdi-pencil
       </v-icon>
+
       <v-icon
+      title="Reset password"
+        small
+        class="mr-2"
+        @click="resetUserPassword(item)"
+      >
+        mdi-sync
+      </v-icon>
+
+      <v-icon
+        :title="activationText"
         small
         @click="activation(item)"
       :color="statusColors[item.status].color">
@@ -142,6 +152,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
     name: "UsersPage",
     props:{},
@@ -209,7 +220,9 @@ export default {
       formTitle () {
         return this.editedIndex === -1 ? 'New User' : 'Edit User'
       },
-    },
+    ...mapGetters(['isAuthenticated','loggedInUser'])
+  },
+
 
     watch: {
       dialog (val) {
@@ -220,8 +233,12 @@ export default {
       },
     },
 
-    mounted(){
+    mounted(){ 
+      if(!this.isAuthenticated){
+      this.$router.push('auth/login')
+      }else{
         this.initialize();
+      }
     },
     methods: {
 

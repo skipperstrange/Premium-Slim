@@ -55,21 +55,18 @@ export default {
     methods: {
         async login() {
                 if (this.$refs.loginForm.validate()) {
-            /*  await  this.$api.post('/auth/login', {email: this.loginEmail, password:this.loginPassword}).then(user=>{
-                    console.log(user)
-                }).catch(e=>console.log(e))
-                */
+                    
                 try{
                     await this.$auth.loginWith('local', 
                         { data: {username: this.loginEmail, password:this.loginPassword} }
-                    ).then((user)=>{
-                        this.$auth.setUser(user.data.user)
-                        this.$router.push('/')
-                    })
-                }catch(e){
-                     console.log(e)
-                     this.error = "Error. Please try again"
-                }
+                        ).then((user)=>{
+                            this.$auth.setUser(user.data.user)
+                            this.$router.push('/')
+                        })
+                    }catch(e){
+                        console.log(e)
+                        this.error = "Error. Please try again"
+                    } 
                 }
             },
             reset() {
