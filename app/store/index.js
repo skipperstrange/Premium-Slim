@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 export const state = () => ({
     customers: [],
     requests: []
@@ -20,22 +18,17 @@ export const mutations = {
     },
 }
 
-export const actions = {
-    async nuxtServerInit({ commit }) {
-        await axios.get("http://localhost:8080/api/v1/requests").then((response) => {
-            const requests = response.data
-            commit("setRequests", requests)
-        }).catch(e => console.log(e))
-
-        await axios.get("http://localhost:8080/api/v1/customers").then((response) => {
-            const customers = response.data
-            commit("setCustomers", customers)
-        }).catch(e => console.log(e))
-    },
-
-
-}
 
 export const getters = {
+    isAuthenticated(state) {
+        return state.auth.loggedIn
+    },
 
+    loggedInUser(state) {
+        return state.auth.user
+    },
+
+    loggedIn(state) {
+        return state.auth.loggedIn
+    }
 }

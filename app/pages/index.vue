@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import RequestsTable from "~/components/RequestsTable.vue";
 export default {
     components: { RequestsTable },
@@ -41,22 +43,30 @@ export default {
             requests: []
         };
     },
-    created() {
-      /*  this.$axios
-            .get("/customers")
-            .then(response => {
-            this.customers.tab = "Customers";
-            this.customers.content = response.data;
-            this.items.push(this.customers);
-        });
-        */
-        this.$axios
-            .get("/requests")
-            .then(response => {
-            this.requests.tab = "Requests";
-            this.requests.content = response.data;
-            this.items.push(this.requests);
-        });
-    },
+    computed: {
+    ...mapGetters(['isAuthenticated','loggedInUser'])
+  },
+
+    mounted(){
+          
+          console.log(this.loggedInUser)
+          if(!this.isAuthenticated){
+            alert("not authenticated")
+            this.$router.push('auth/login')
+            }else{
+              this.initialize();
+            }
+        },
+
+        methods: {
+          initialize(){
+              this.$api.get('/requests').then(response=>{
+                this.users = response.data
+                this.requests.tab = "Requests";
+                this.requests.content = response.data;
+                this.items.push(this.requests);
+            })
+          }
+        }
 }
 </script>

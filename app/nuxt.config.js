@@ -50,7 +50,38 @@ export default {
         '@nuxtjs/pwa',
         // https://go.nuxtjs.dev/content
         '@nuxt/content',
+        // Auth module by auth- next
+        '@nuxtjs/auth-next'
     ],
+
+    auth: {
+        // Options
+        strategies: {
+            local: {
+                //      scheme: "refresh",
+                token: {
+                    property: "token", // property name that the Back-end sends for you as a access token for saving on localStorage and cookie of user browser
+                    global: true,
+                    required: true,
+                    type: "Bearer"
+                },
+                user: {
+                    property: "user",
+                    // autoFetch: false
+                },
+                //      refreshToken: {  // it sends request automatically when the access token expires, and its expire time has set on the Back-end and does not need to we set it here, because is useless
+                //        property: "refresh_token", // property name that the Back-end sends for you as a refresh token for saving on localStorage and cookie of user browser
+                //        data: "refresh_token", // data can be used to set the name of the property you want to send in the request.
+                //      },
+                endpoints: {
+                    login: { url: "/auth/login", method: "post", propertyName: 'token' },
+                    //        refresh: { url: "/api/auth/refresh-token", method: "post" },
+                    logout: false, //  we don't have an endpoint for our logout in our API and we just remove the token from localstorage
+                    // user: { url: "/auth/user", method: "get" }
+                }
+            }
+        }
+    },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {

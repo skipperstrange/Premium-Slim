@@ -32,6 +32,11 @@
             </v-btn>
           </template>
           <v-card>
+              <v-form
+                ref="form"
+                v-model="valid"
+                lazy-validation
+  >
             <v-card-title>
               <span class="text-h5">{{ formTitle }}</span>
             </v-card-title>
@@ -44,7 +49,7 @@
                   >
                     <v-text-field
                       v-model="editedItem.first_name"
-                      label="First Name"
+                      label="First Name" required :rules="firstNameRules"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -52,7 +57,7 @@
                   >
                     <v-text-field
                       v-model="editedItem.last_name"
-                      label="Last Name"
+                      label="Last Name" required :rules="lastNameRules"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -60,13 +65,13 @@
                   >
                     <v-text-field
                       v-model="editedItem.username"
-                      label="Username"
+                      label="Username" required :rules="usernameRules"
                     ></v-text-field>
                   </v-col>
                   <v-col
                     cols="12"
                   >
-                    <v-combobox label="Role" v-model="roles[editedItem.role]" outlined dense :items="roles"></v-combobox>
+                    <v-combobox label="Role" v-model="editedItem.role" outlined dense :items="roles" :rules="[v => !!v || 'Please select a role for this user']"></v-combobox>
                   </v-col>
                   <v-col
                     cols="12"
@@ -94,23 +99,23 @@
                 Save
               </v-btn>
             </v-card-actions>
+            </v-form>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogActivate" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5">Are you sure you want to deactivate this user?</v-card-title>
+            <v-card-title class="text-h6">Are you sure you want to {{activationText}} this user?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="closeUserActivate">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deactivateUserConfirm">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="activationConfirm">OK</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
-    // eslint-disable-next-line vue/valid-v-slot
-    <template v-slot:[`item.actions`]="{ item }">
+    <template #[`item.actions`]="{ item }">
       <v-icon
         small
         class="mr-2"
@@ -121,8 +126,8 @@
       <v-icon
         small
         @click="activation(item)"
-      >
-        mdi-delete
+      :color="statusColors[item.status].color">
+        {{statusColors[item.status].icon}}
       </v-icon>
     </template>
     <template v-slot:no-data >
@@ -143,24 +148,43 @@ export default {
     
     data(){
         return {
-
+        statusColors: {
+                "active":{"color": "green", "icon": "mdi-check"},
+                "disabled":{"color": "red", "icon": "mdi-cancel"}
+            },
+        activationOption: '',
+        newStatus: "",
+        activationText: '',
         dialogActivate: false,
         dialog: false,
         users: [],
-        roles: ['viewer', 'operator', 'administrator'],
+        valid: true,
+        roles: ['orperator', 'administrator'],
         editedIndex: -1,
         editedItem: {
-        firs_name: '',
+        first_name: '',
         last_name: '',
         username: '',
-        role: 'operator',
+        role: 'orperator',
         },
         defaultItem: {
-        firs_name: '',
+        first_name: '',
         last_name: '',
-        username: 'operator',
-        role: 0,
+        username: '',
+        role: 'orperator',
         },
+        firstNameRules: [
+                v => !!v || 'A name is required',
+                v => (v && v.length >= 2) || 'Name must be more than 2 characters',
+            ],
+        lastNameRules: [
+                v => !!v || 'A last name is required',
+                v => (v && v.length >= 2) || 'Last name must be more than 2 characters',
+            ],
+        usernameRules: [
+                v => !!v || 'Username is required',
+                v => /.+@.+\..+/.test(v) || 'Username must be an email format',
+            ],
         headers: [
         {
           text: 'First Name',
@@ -216,12 +240,31 @@ export default {
       activation (item) {
         this.editedIndex = this.users.indexOf(item)
         this.editedItem = Object.assign({}, item)
+        if(this.editedItem.status === 'disabled'){
+              this.activationText = 'activate'
+          }else if(this.editedItem.status === 'active'){
+              this.activationText = 'deactivate'
+          }
         this.dialogActivate = true
       },
 
       activationConfirm () {
-        this.users.splice(this.editedIndex, 1)
-        this.closeUserActivate()
+        if(this.editedItem.status === 'disabled'){
+              this.newStatus = 'active'
+          }else if(this.editedItem.status === 'active'){
+              this.newStatus = 'disabled'
+          }
+          
+           this.editedItem.status = this.newStatus
+           this.$api.post('/users/edit',{user: this.editedItem}).then(response=>{
+                this.editedItem = response.data
+                    Object.assign(this.users[this.editedIndex], this.editedItem)
+                console.log(this.editedItem)
+                setTimeout(()=>{ this.closeUserActivate()}, 1000)
+            })
+            .catch(e=>{
+                console.log(e)
+            })
       },
 
       close () {
@@ -245,12 +288,27 @@ export default {
       },
 
       save () {
-
+        
+          let url
         if (this.editedIndex > -1) {
-            console.log(this.users[this.editedIndex])
-          Object.assign(this.users[this.editedIndex], this.editedItem)
-        } else {
-          this.users.push(this.editedItem)
+            url = '/users/edit'
+        }else{
+             url = '/users/create'
+        }
+        if (this.$refs.form.validate()) {
+        this.$api.post(url,{user: this.editedItem}).then(response=>{
+                this.editedItem = response.data
+                console.log(this.editedItem)
+                if (this.editedIndex > -1) {
+                    Object.assign(this.users[this.editedIndex], this.editedItem)
+                }else {
+                    this.users.push(this.editedItem)
+                }
+                setTimeout(()=>{ this.close()}, 700)
+            })
+            .catch(e=>{
+                console.log(e)
+            })
         }
         
       },

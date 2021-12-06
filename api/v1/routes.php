@@ -13,13 +13,17 @@ $app->group('/edit', function () use ($app) {
 /*
 Users
  */
-$app->post('/new', 'UserController:create');
+$app->post('/users/create', 'UserController:create');
+$app->post('/users/edit', 'UserController:edit');
+$app->post('/users/status', 'UserController:status');
 $app->get('/users', 'UserController:index');
 $app->get('/users/{id}', 'UserController:index');
 
 
 //authentication of new user
-$app->post('/login', 'AuthController:authenticate');
+$app->post('/auth/login', 'AuthController:authenticate');
+// get current authenticated user
+$app->get('/auth/user', 'AuthController:user');
 
 
 /*

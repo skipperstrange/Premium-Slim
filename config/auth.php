@@ -1,7 +1,7 @@
 <?php
 
 $config["auth"] =  [
-    "path" => ["/edit"], /* or ["/api", "/admin"] */
+    "path" => ["/auth/user"], /* or ["/api", "/admin"] */
     "attribute" => "decoded_token_data",
     "secret" => JWT_SECRET,
     "algorithm" => ["HS256"],

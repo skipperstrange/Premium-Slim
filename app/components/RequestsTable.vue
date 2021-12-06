@@ -26,7 +26,7 @@
              <a :href='"tel:"+item.customer.mobile+""' title="Call this customer."> <v-icon class="m-0" color="success" >mdi-phone</v-icon></a></p></td>
              <td><p>{{item.policy}}</p></td>
              <td><p>{{item.property_policy}}</p></td>
-             <td></td>
+             <td><p>{{item.status}}</p></td>
              <td>
                  <v-btn icon title="View User">
                     <v-icon :class="'m-0 '+item.status" :title="item.status" @click="markDone(item)" >mdi-check-circle-outline</v-icon>
@@ -111,12 +111,12 @@ export default{
         filterable: false,
         value: 'home_cover',
         },
-        // Actions column
+        
         {
-        text: '',
+        text: 'Status',
         align: 'center',
         filterable: false,
-        value: '',
+        value: 'status',
         },
         {
         text: '',
@@ -173,7 +173,6 @@ export default{
        },
        viewCustomer(customer){
            this.openDialog('customer', customer)
-           console.log(customer);
        },
        comment(request){
            this.openDialog('comment', request)
@@ -186,23 +185,22 @@ export default{
        // choose which dialogto show - quote, customer, comment
        enableDialog(dialog, request){
 
-            this.selectedRequest = request
-            console.log(this.status)
-           // eslint-disable-next-line no-empty
-           switch (dialog){
-               case 'quote':
-                   this.showQuoteDialog = true
-               break;
-               case 'request':
-                    this.showRequestDialog = true
-               break;
-               case 'status':
-                   this.showDoneDialog = true
-               break;
-               case 'comment':
-                   this.showCommentDialog = true
-               break;
-           }
+        this.selectedRequest = request
+        // eslint-disable-next-line no-empty
+        switch (dialog){
+            case 'quote':
+                this.showQuoteDialog = true
+            break;
+            case 'request':
+                this.showRequestDialog = true
+            break;
+            case 'status':
+                this.showDoneDialog = true
+            break;
+            case 'comment':
+                this.showCommentDialog = true
+            break;
+        }
        },
 
         disableDialog(){
