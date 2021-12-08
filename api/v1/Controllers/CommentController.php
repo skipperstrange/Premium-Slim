@@ -3,6 +3,7 @@
 namespace Premium\Api\Controllers;
 
 use Premium\Models\Comment;
+use Premium\Models\Request;
 
 class CommentController  
 {
@@ -31,5 +32,9 @@ class CommentController
         } else {
             return $response->withStatus(400);
         }
+    }
+
+    function request($request, $response, $args){
+
     }
 }

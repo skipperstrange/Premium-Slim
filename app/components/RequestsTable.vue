@@ -105,8 +105,7 @@ export default{
         filterable: false,
         value: 'cover',
         },
-        {
-        text: 'Home Policy',
+        {text: 'Home Policy',
         align: '',
         filterable: false,
         value: 'home_cover',

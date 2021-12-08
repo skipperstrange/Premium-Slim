@@ -38,10 +38,30 @@
       <v-spacer />
 
       <v-spacer></v-spacer>
+  <v-menu bottom left>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn dark icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
 
-      <v-btn icon title="Logout" @click="logout()">
-        <v-icon>mdi-logout</v-icon>
-      </v-btn>
+            <v-list>
+              <v-list-item >
+                <v-list-item-title @click="logout()">
+                    <v-icon>mdi-logout</v-icon>
+                  Logout
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item >
+                <v-list-item-title @click="changePassword()">
+                  <v-btn icon title="Change Password">
+                    <v-icon>mdi-lock</v-icon>
+                  </v-btn>
+                    Change Password
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
     </v-app-bar>
     </div>
 </template>
@@ -53,7 +73,7 @@ export default {
      data () {
     return {
       clipped: false,
-      drawer: false,
+      drawer: true,
       fixed:false,
       user: {},
       items: [
@@ -69,23 +89,17 @@ export default {
         }
       ],
       miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Admin'
+      title: 'Premium Admin'
     }
   },
   computed: {
     ...mapGetters(['isAuthenticated','loggedInUser'])
   },
   mounted() {
-      console.log(this.loggedInUser)
-      // this.user = this.loggedInUser
-      // this.title = this.user.first_name+' '+this.user.last_name
   },
   methods:{
       async logout(){
           await this.$auth.logout()
-              console.log('Logging out..')
             this.$router.push('/auth/login')
       }
   }

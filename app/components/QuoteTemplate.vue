@@ -50,7 +50,6 @@
               </tr>
               </template>
           </v-simple-table>
-
             <p><b>Status: </b>{{request.status}}</p>
 </v-container>
         </v-card-text>

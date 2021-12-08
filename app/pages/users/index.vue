@@ -2,13 +2,11 @@
 <v-data-table
     :headers="headers"
     :items="users"
-    sort-by="fullname"
+    sort-by="username"
     class="elevation-1"
   >
     <template v-slot:top>
-      <v-toolbar
-        flat
-      >
+      <v-toolbar flat>
         <v-toolbar-title>Users</v-toolbar-title>
         <v-divider
           class="mx-4"
@@ -16,27 +14,14 @@
           vertical
         ></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
+        <v-dialog v-model="dialog" max-width="500px">
           <template #activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              class="mb-2"
-              v-bind="attrs"
-              v-on="on"
-            >
+            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
               New User
             </v-btn>
           </template>
           <v-card>
-              <v-form
-                ref="form"
-                v-model="valid"
-                lazy-validation
-  >
+              <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-title>
               <span class="text-h5">{{ formTitle }}</span>
             </v-card-title>
@@ -114,29 +99,14 @@
       </v-toolbar>
     </template>
     <template #[`item.actions`]="{ item }">
-      <v-icon
-      title="Edit this user"
-        small
-        class="mr-2"
-        @click="editUser(item)"
-      >
+      <v-icon title="Edit this user" small class="mr-2" @click="editUser(item)">
         mdi-pencil
       </v-icon>
-
-      <v-icon
-      title="Reset password"
-        small
-        class="mr-2"
-        @click="resetUserPassword(item)"
-      >
+      <v-icon title="Reset password" small class="mr-2" @click="resetUserPassword(item)">
         mdi-sync
       </v-icon>
 
-      <v-icon
-        :title="activationText"
-        small
-        @click="activation(item)"
-      :color="statusColors[item.status].color">
+      <v-icon :title="activationText" small :color="statusColors[item.status].color" @click="activation(item)">
         {{statusColors[item.status].icon}}
       </v-icon>
     </template>
@@ -315,6 +285,7 @@ export default {
         if (this.$refs.form.validate()) {
         this.$api.post(url,{user: this.editedItem}).then(response=>{
                 this.editedItem = response.data
+                this.editedItem.status = 'disabled'
                 console.log(this.editedItem)
                 if (this.editedIndex > -1) {
                     Object.assign(this.users[this.editedIndex], this.editedItem)

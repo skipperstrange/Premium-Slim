@@ -21,7 +21,8 @@ class RequestController
 
 
     private function organize_payload($result){
-        $cover = Cover::where('code',$result->cover)->first();
+        if($result){
+            $cover = Cover::where('code',$result->cover)->first();
         $homeprehensive = Homeinsurance::where('id',$result->homeinsurance)->first();
         $usage = Usage::find($result->vusage);
         $customer = Customer::find($result->userid);
@@ -48,6 +49,8 @@ class RequestController
         ], 
           ];
         return $data;
+        }
+        return false;
     }
     
     function index($request, $response, $args)
@@ -57,9 +60,12 @@ class RequestController
         if(isset($args['id'])){
             try{
                 $req = $this->requestModel->find($args['id']);
-            $req['usage'] = $req['vusage'];
-            $payload = $this->organize_payload($req);
-            return $response->withStatus(200)->withJson($payload);
+             if(isset($req->id)){
+                $req['usage'] = $req['vusage'];
+                $payload = $this->organize_payload($req);
+                return $response->withStatus(200)->withJson($payload);
+             }
+             return $response->withStatus(404)->withJson(["message"=>"Not Found"]);
             }
             catch(Exception $e){
                 return $response->withStatus(404)->withJson(["message"=>"Not Found"]);
@@ -97,13 +103,13 @@ class RequestController
     function status($request, $response, $args){
         if(isset($args['status'])){
             $status = $args['status'];
-            $results = $this->requestModel->select('*')->where('status', $status)->get();
+            $results = $this->requestModel->where('status', $status)->get();
             
             foreach ($results as $request) {
                 $request['usage'] = $request['vusage'];
                $payload[] = $this->organize_payload($request);
             }
-            return $response->withStatus(200)->withJson($results);
+            return $response->withStatus(200)->withJson($payload);
         }
         return $response->withStatus(404)->withJson([]);
     }
