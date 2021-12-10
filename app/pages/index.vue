@@ -36,9 +36,15 @@ export default {
             status: ['complete', 'failed', 'pending','unfollowed'],
         };
     },
+    created(){
+      this.$nuxt.$on('status-change', () => {
+          // console.log("There has been a status change!!")
+          this.initialize()
+      })
+    },
     computed: {
     ...mapGetters(['isAuthenticated','loggedInUser'])
-  },
+    },
 
     mounted(){
         if(!this.isAuthenticated){
@@ -50,10 +56,14 @@ export default {
 
         methods: {
           initialize(){
-              
+            this.items = [];
               this.status.forEach((e, i)=>{
                 this.$api.get('/requests/status/'+e).then(response=>{
-                  this.items.push({tab: e, content: response.data, count:response.data.length});
+                  let counter = '0'
+                   if(response.data.length > 0){
+                     counter = response.data.length
+                   }
+                  this.items.push({tab: e, content: response.data, count:counter});
                 })
               })
           }

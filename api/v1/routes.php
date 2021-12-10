@@ -45,4 +45,5 @@ $app->post('/status', 'RequestController:status_change');
 // Comments
 $app->post('/comment', 'CommentController:create');
 $app->get('/comments/request/{id}', 'CommentController:request');
+$app->get('/request/{id}/comments', 'RequestController:comment');
 

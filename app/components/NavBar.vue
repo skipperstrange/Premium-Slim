@@ -19,7 +19,7 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title v-text="title" />
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -96,6 +96,7 @@ export default {
     ...mapGetters(['isAuthenticated','loggedInUser'])
   },
   mounted() {
+     // console.log(this.loggedInUser)
   },
   methods:{
       async logout(){

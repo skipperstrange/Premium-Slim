@@ -8,15 +8,18 @@ use Premium\Models\Customer;
 use Premium\Models\Usage;
 use Premium\Models\Cover;
 use Premium\Models\Homeinsurance;
+use Premium\Models\Comment;
 
 class RequestController
 {
     private $requestModel;
+    private $commentModel;
     private $requestStatus = ['complete', 'failed', 'pending', 'unfollowed'];
 
     function __construct()
     {
         $this->requestModel = new Request();
+        $this->commentModel = new Comment();
     }
 
 
@@ -101,6 +104,8 @@ class RequestController
 
 
     function status($request, $response, $args){
+        $payload =[];
+        
         if(isset($args['status'])){
             $status = $args['status'];
             $results = $this->requestModel->where('status', $status)->get();
@@ -120,5 +125,10 @@ class RequestController
         mapObjectValues($this->requestModel, $_status);
         $this->requestModel->where('id',$_status['id'])->update(['status'=>$_status['status']]);
         return $response->withStatus(200)->withJson($_status);
+    }
+
+    function comment($request, $response, $args){
+        $comments = $this->requestModel->comments()->where('request_id', $args['id'])->get();
+        return $response->withStatus(200)->withJson($comments);
     }
 }

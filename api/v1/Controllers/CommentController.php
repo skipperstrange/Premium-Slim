@@ -3,7 +3,6 @@
 namespace Premium\Api\Controllers;
 
 use Premium\Models\Comment;
-use Premium\Models\Request;
 
 class CommentController  
 {
@@ -35,6 +34,7 @@ class CommentController
     }
 
     function request($request, $response, $args){
-
+        $comments = $this->commentModel->where('request_id', $args['id'])->orderBy('id', 'DESC')->get();
+        return $response->withStatus(200)->withJson($comments);
     }
 }
